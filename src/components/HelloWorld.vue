@@ -1,7 +1,6 @@
 <template>
   <div class="hello">
     <h1>{{ message }}</h1>
-
     <input v-model.number="operand1" name="operand1"/>
     <input v-model.number="operand2" name="operand2"/>
     = {{ result }}   
