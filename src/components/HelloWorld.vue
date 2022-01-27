@@ -21,8 +21,8 @@
     </button>
     <button @click="eraseOne">E</button>
     <br><br>
-<label><input type="radio" value="operand1" v-model="operch" name="operand" />Операнд 1</label>
-<label><input type="radio" value="operand2" v-model="operch" name="operand" />Операнд 2</label>
+<label><input type="radio" value="1" v-model="operch" name="operand" />Операнд 1</label>
+<label><input type="radio" value="2" v-model="operch" name="operand" />Операнд 2</label>
 </div>
 
     <br/>
@@ -57,7 +57,7 @@ export default {
       result: 0,
       error: '',
       showvk: false,
-      operch: "1"
+      operch: ""
     }
   },
   methods: {
