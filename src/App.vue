@@ -8,12 +8,16 @@
       <div class="title">My personal costs</div>
     </header>
     <main>
+      <!-- <add-payment-form @addNewPayment="addPayment" /> -->
+      TOTAL: {{ getFullPaymentValue }}
+      <hr />
       <add-payment-form @addNewPayment="addPayment" />
-      <payments-display :items="paymentsList" />
-    </main> 
-    <my-form/>
-    
-      <!-- <button @click="show=!show">ADD NEW COST+ </button>
+      <payments-display :items="currentElements" />
+      <pagination :length="12" :cur="curPage" :n="3" @paginate="onChangePage"/>
+    </main>
+    <my-form />
+
+    <!-- <button @click="show=!show">ADD NEW COST+ </button>
          <div class="form" v-if="show">
     </div> -->
   </div>
@@ -23,12 +27,15 @@
 import MyForm from "./components/MyForm.vue";
 import AddPaymentForm from "./components/AddPaymentForm.vue";
 import PaymentsDisplay from "./components/PaymentsDisplay.vue";
+import Pagination from "./components/Pagination.vue";
+import { mapMutations, mapActions, mapGetters } from "vuex";
 // import HelloWorld from './components/HelloWorld.vue'
 // import MyButton from './components/MyButton.vue'
 
 export default {
   name: "App",
   components: {
+    Pagination,
     MyForm,
     AddPaymentForm,
     PaymentsDisplay,
@@ -37,39 +44,66 @@ export default {
   },
   data() {
     return {
+      curPage: 1,
+      n: 10,
       // show: false,
-      paymentsList: [],
+      // paymentsList: [],
     };
   },
+  computed: {
+    ...mapGetters(['getFullPaymentValue']),
+    // getFPV() {
+    //   return this.$store.getters.getFullPaymentValue
+    // },
+    paymentsList() {
+      return this.$store.getters.getPaymentList;
+    },
+    currentElements(){
+      return this.paymentsList.slice(3 * (this.curPage - 1), 3 * (this.curPage - 1) + 3)
+    }
+  },
   methods: {
+    ...mapMutations({
+      myMutation: "setPaymentsListData",
+    }),
+    ...mapActions(["fetchData"]),
     addPayment(data) {
-      this.paymentsList = [...this.paymentsList, data];
+      this.$store.commit("addDataToPaymentsList", data);
+      // this.paymentsList = [...this.paymentsList, data];
     },
-    fetchData() {
-      return [
-        {
-          id: "1",
-          date: "28.03.2020",
-          category: "Food",
-          value: 169,
-        },
-        {
-          id: "2",
-          date: "24.03.2020",
-          category: "Transport",
-          value: 360,
-        },
-        {
-          id: "3",
-          date: "24.03.2020",
-          category: "Food",
-          value: 532,
-        },
-      ];
+    onChangePage(page){
+      this.curPage = page
+      this.fetchData(page)
     },
+    // fetchData() {
+    //   return [
+    //     {
+    //       id: "1",
+    //       date: "28.03.2020",
+    //       category: "Food",
+    //       value: 169,
+    //     },
+    //     {
+    //       id: "2",
+    //       date: "24.03.2020",
+    //       category: "Transport",
+    //       value: 360,
+    //     },
+    //     {
+    //       id: "3",
+    //       date: "24.03.2020",
+    //       category: "Food",
+    //       value: 532,
+    //     },
+    //   ];
+    // },
   },
   created() {
-    this.paymentsList = this.fetchData();
+    this.fetchData(this.curPage);
+    // this.$store.dispatch('fetchData');
+    //this.myMutation(this.fetchData());
+    //this.$store.commit('setPaymentsListData', this.fetchData());
+    //this.paymentsList = this.fetchData();
   },
 };
 </script>
@@ -83,5 +117,4 @@ export default {
   color: #2c3e50;
   margin-top: 60px;
 }
-
 </style>

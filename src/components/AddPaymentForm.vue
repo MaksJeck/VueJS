@@ -1,7 +1,14 @@
 <template>
   <div>
-    <input placeholder="Value" v-model="value" />
-    <input placeholder="Category" v-model="category" />
+    <input placeholder="Value" v-model.number="value" />
+
+    <div class="select">
+      <select v-model="category">
+        <option v-for="(option, idx) in options" :key="idx"> {{option}} </option>
+      </select>
+    </div>
+
+    <!-- <input placeholder="Category" v-model="category" /> -->
     <input placeholder="Date" v-model="date" />
     <button @click="onSaveClick">Save</button>
   </div>
@@ -25,6 +32,9 @@ export default {
       const y = today.getFullYear();
       return `${d}.${m}.${y}`;
     },
+    options(){
+      return this.$store.getters.getCategoryList
+    }
   },
   methods: {
     onSaveClick() {
@@ -35,8 +45,15 @@ export default {
         date: this.date || this.getCurrentDate,
       };
       this.$emit("addNewPayment", data);
+      this.$store.commit('addDataToPaymentsList', data);
       // console.log(data);
     },
+  },
+  async created(){
+    if(!this.options.lenght){
+      await this.$store.dispatch('loadCategories');
+    } 
+    this.category = this.options[0];
   }
 };
 </script>
