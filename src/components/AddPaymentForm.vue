@@ -54,6 +54,17 @@ export default {
       await this.$store.dispatch('loadCategories');
     } 
     this.category = this.options[0];
+  },
+  mounted(){    
+    if(this.$route.params.category) {
+      this.category = this.$route.params.category
+    }
+    if(this.$route.query.value) {
+      this.value = this.$route.query.value
+    }
+    if (this.value && this.category) {
+      this.onSaveClick()
+    }
   }
 };
 </script>

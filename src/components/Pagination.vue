@@ -27,7 +27,7 @@ export default {
   },
   methods: {
     onClick(page) {
-      if (page < 1 || page > this.amount || this.cur) {
+      if (page < 1 || page > this.amount || page === this.cur) {
         return;
       }
       this.$emit("paginate", page);
@@ -39,10 +39,9 @@ export default {
 <style > 
 .center {
   display: flex;
-  justify-content: center; 
+  justify-content: center;
 }
-/* .center:active {
-  padding: 5px;
-  background: #ccc;
-} */
+.center:hover > div {
+  background: gray;
+}
 </style>

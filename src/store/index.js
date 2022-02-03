@@ -40,17 +40,17 @@ export default new Vuex.Store ({
     state: {
         paymentsList: [],
         categoryList: [],
-        paymentListIDS: []
+        // paymentListIDS: []
     },
     mutations: {
         setPaymentsListData(state, payload){
-            // state.paymentsList = payload;
-            const newUnObj = payload.filter(obj => {
-                return state.paymentListIDS.indexOf(obj.id) < 0
-            })
-            const uniqIds = newUnObj.map(obj => obj.id)
-            state.paymentListIDS.push(...uniqIds)
-            state.paymentsList.push(...newUnObj)
+            state.paymentsList = payload;
+            // const newUnObj = payload.filter(obj => {
+            //     return state.paymentListIDS.indexOf(obj.id) < 0
+            // })
+            // const uniqIds = newUnObj.map(obj => obj.id)
+            // state.paymentListIDS.push(...uniqIds)
+            // state.paymentsList.push(...newUnObj)
         },
         addDataToPaymentsList(state, data){
             state.paymentsList.push(data);
@@ -65,32 +65,32 @@ export default new Vuex.Store ({
         // }
     },
     actions: {
-        fetchData({commit}, page){
-            return new Promise((resolve) => {
-                setTimeout(()=>{
-                    const items = localDB[`page${page}`]
-                    resolve(items)
-                }, 1000)
-            }).then(res => commit('setPaymentsListData', res))
-        },
-        // fetchData({commit}){
+        // fetchData({commit}, page){
         //     return new Promise((resolve) => {
-        //         setTimeout(() => {
-        //             const items = [];
-        //             for(let i=1; i<101; i++){
-        //                 items.push({
-        //                     date: Date.now(),
-        //                     category: 'Food',
-        //                     id: i,
-        //                     value: i
-        //                 })
-        //             }
+        //         setTimeout(()=>{
+        //             const items = localDB[`page${page}`]
         //             resolve(items)
-        //         }, 1500)
-        //     }).then(res => {
-        //         commit('setPaymentsListData', res)
-        //     })            
+        //         }, 1000)
+        //     }).then(res => commit('setPaymentsListData', res))
         // },
+        fetchData({commit}){
+            return new Promise((resolve) => {
+                setTimeout(() => {
+                    const items = [];
+                    for(let i=1; i<101; i++){
+                        items.push({
+                            date: Date.now(),
+                            category: 'Food',
+                            id: i,
+                            value: i
+                        })
+                    }
+                    resolve(items)
+                }, 1500)
+            }).then(res => {
+                commit('setPaymentsListData', res)
+            })            
+        },
         loadCategories({commit}){
             return new Promise((resolve) => {
                 setTimeout(() => {
