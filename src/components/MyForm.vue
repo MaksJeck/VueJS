@@ -1,14 +1,31 @@
 <template>
   <div>
+    <div class="header">
+      {{ settings.header }}
+    </div>
     <button class="green_btn" @click="show = !show">ADD NEW COST +</button>
     <div class="form" v-if="show">
-        <button class="green_btn" @click="show = !show">Cancel</button>
+      <div class="content">
+        <add-payment-form v-if="settings.content === 'AddPaymentForm'"/>
+        <auth v-if="settings.content === 'Auth'"/>
+      </div>
+
+        <button class="green_btn" @click="show = !show">Close</button>
     </div>
   </div>
 </template>
 
 <script>
+// import AddPaymentForm from './AddPaymentForm.vue';
+// import Auth from './Auth.vue';
 export default {
+  components: { 
+    AddPaymentForm: () => import('./AddPaymentForm.vue'),
+    Auth: () => import('./Auth.vue') 
+  },
+  props: {
+    settings: Object
+  },
   name: "MyForm",
   data() {
     return {

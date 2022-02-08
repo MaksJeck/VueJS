@@ -10,13 +10,15 @@
     <main>
       <!-- <add-payment-form @addNewPayment="addPayment" /> -->
       TOTAL: {{ getFullPaymentValue }}
+      <br>
+      <button @click="onShowModal">ShowModal</button>
       <hr />
-      <add-payment-form @addNewPayment="addPayment" />
+      <!-- <add-payment-form @addNewPayment="addPayment" /> -->
       <payments-display :items="currentElements" />
       <!-- <pagination :length="12" :cur="curPage" :n="3" @paginate="onChangePage"/> -->
       <pagination :length="paymentsList.length" :cur="curPage" :n="n" @paginate="onChangePage"/>
     </main>
-    <my-form />
+    <!-- <my-form /> -->
 
     <!-- <button @click="show=!show">ADD NEW COST+ </button>
          <div class="form" v-if="show">
@@ -25,10 +27,10 @@
 </template>
 
 <script>
-import MyForm from "./components/MyForm.vue";
-import AddPaymentForm from "./components/AddPaymentForm.vue";
-import PaymentsDisplay from "./components/PaymentsDisplay.vue";
-import Pagination from "./components/Pagination.vue";
+// import MyForm from "./components/MyForm.vue";
+// import AddPaymentForm from "./components/AddPaymentForm.vue";
+// import PaymentsDisplay from "./components/PaymentsDisplay.vue";
+// import Pagination from "./components/Pagination.vue";
 import { mapMutations, mapActions, mapGetters } from "vuex";
 // import HelloWorld from './components/HelloWorld.vue'
 // import MyButton from './components/MyButton.vue'
@@ -36,10 +38,10 @@ import { mapMutations, mapActions, mapGetters } from "vuex";
 export default {
   name: "App",
   components: {
-    Pagination,
-    MyForm,
-    AddPaymentForm,
-    PaymentsDisplay,
+    Pagination: () => import('./components/Pagination.vue'),
+    // MyForm,
+    // AddPaymentForm,
+    PaymentsDisplay: () => import('./components/PaymentsDisplay.vue'),
     // HelloWorld,
     // MyButton
   },
@@ -72,6 +74,12 @@ export default {
     addPayment(data) {
       this.$store.commit("addDataToPaymentsList", data);
       // this.paymentsList = [...this.paymentsList, data];
+    },
+    onShowModal(){
+      this.$modal.show('AddPaymentForm', {
+        header: "Add payment form",
+        content: "AddPaymentForm"
+      })
     },
     onChangePage(page){
       this.curPage = page

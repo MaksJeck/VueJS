@@ -7,6 +7,10 @@
       <a href="about">About</a> -->
     </div>
     <router-view />
+    <my-form :settings="settings" v-if="modalWindowName"/>
+    <transition name="fade">
+      <context-menu />
+    </transition>
 
     <!-- <img alt="Vue logo" src="./assets/logo.png">
     <HelloWorld msg="Welcome to Your Vue.js App"/>
@@ -35,6 +39,8 @@
 </template>
 
 <script>
+// import ContextMenu from './components/ContextMenu.vue';
+// import MyForm from './components/MyForm.vue';
 // import MyForm from "./components/MyForm.vue";
 // import AddPaymentForm from "./components/AddPaymentForm.vue";
 // import PaymentsDisplay from "./components/PaymentsDisplay.vue";
@@ -48,7 +54,9 @@
 export default {
   name: "App",
   components: {
+    MyForm: () => import(/* webpackChankName: "Modal"*/ './components/MyForm.vue'),
     // Pagination,
+    ContextMenu: () => import(/* webpackChankName: "Context"*/ './components/ContextMenu.vue')
     // MyForm,
     // AddPaymentForm,
     // PaymentsDisplay,
@@ -59,7 +67,10 @@ export default {
   },
   data() {
     return {
+      // modalShow: false,
+      modalWindowName: '',
       page: "",
+      settings: {}
       // curPage: 1,
       // n: 10,
       // show: false,
@@ -98,8 +109,18 @@ export default {
     //   this.curPage = page;
     //   this.fetchData(page);
     // },
+    onShown(settings){
+      this.modalWindowName = settings.name
+      this.settings = settings
+    },
+    onHide(){
+      this.modalWindowName = ''
+      this.settings = {}
+    }
   },
   mounted() {
+    this.$modal.EventBus.$on('show', this.onShown);
+    this.$modal.EventBus.$on('hide', this.onHide);
     const links = document.querySelectorAll("a");
     links.forEach((link) => {
       link.addEventListener("click", (event) => {
@@ -113,6 +134,8 @@ export default {
   },
   beforeDestroy() {
     window.removeEventListener("popstate", this.setPage);
+    this.$modal.EventBus.$off('show', this.onShown);
+    this.$modal.EventBus.$off('hide', this.onHide);
   },
   // fetchData() {
   //   return [
@@ -138,6 +161,8 @@ export default {
   // },
 
   created() {
+    this.$modal.show();
+    this.$modal.hide();
     // this.fetchData(this.curPage);
     // this.fetchData();
      this.$store.dispatch('fetchData');
