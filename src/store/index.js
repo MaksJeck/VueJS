@@ -40,9 +40,30 @@ export default new Vuex.Store ({
     state: {
         paymentsList: [],
         categoryList: [],
+        edit: false,
+        editIndex:-1,
         // paymentListIDS: []
     },
     mutations: {
+        editFromItem(index) {
+            this.edit = true;
+          this.editIndex = index;
+            this.item = this.items[index];
+        //   $('#modal').modal('show');
+            },
+        // editFromItem() {
+        //     // state.paymentsList=state.paymentsList.map((elem)=>{
+        //     //     return elem.id === item.id ? item : elem;
+        //     //   })
+
+        // },
+        removeFromItem(state, index){
+            state.paymentsList.splice(index, 1)
+        },
+        // removeItem(state, id) {
+        //     for (let key in state.paymentsList)
+        //     state.paymentsList[key] = state.paymentsList[key].filter((favorite) => favorite.id != id);
+        //   },
         setPaymentsListData(state, payload){
             state.paymentsList = payload;
             // const newUnObj = payload.filter(obj => {
@@ -65,6 +86,12 @@ export default new Vuex.Store ({
         // }
     },
     actions: {
+        edit_from_item({commit}, index) {
+            commit('editFromItem', index);
+        },
+        delete_from_item({commit}, index) {
+            commit('removeFromItem', index);
+        },
         // fetchData({commit}, page){
         //     return new Promise((resolve) => {
         //         setTimeout(()=>{

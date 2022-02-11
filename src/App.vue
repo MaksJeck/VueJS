@@ -7,10 +7,14 @@
       <a href="about">About</a> -->
     </div>
     <router-view />
+    <transition name="fade">
     <my-form :settings="settings" v-if="modalWindowName"/>
+    </transition>
+    
     <transition name="fade">
       <context-menu />
     </transition>
+    <calc />
 
     <!-- <img alt="Vue logo" src="./assets/logo.png">
     <HelloWorld msg="Welcome to Your Vue.js App"/>
@@ -56,7 +60,8 @@ export default {
   components: {
     MyForm: () => import(/* webpackChankName: "Modal"*/ './components/MyForm.vue'),
     // Pagination,
-    ContextMenu: () => import(/* webpackChankName: "Context"*/ './components/ContextMenu.vue')
+    ContextMenu: () => import(/* webpackChankName: "Context"*/ './components/ContextMenu.vue'),
+    Calc: () => import(/* webpackChankName: "Calculator"*/ './components/Calc.vue'),
     // MyForm,
     // AddPaymentForm,
     // PaymentsDisplay,

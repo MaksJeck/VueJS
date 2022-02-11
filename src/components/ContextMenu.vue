@@ -1,7 +1,8 @@
 <template>
-    <div class="contetx" v-if="isShow">
-        <div class="context__item" v-for="(item, idx) in items" :key="idx">
+    <div class="context" v-if="isShow">
+        <div class="context__item" v-for="(item, idx) in items" :key="idx" @click="onClickAction(item)">
             {{item.text}}
+            
         </div>
     </div>
 </template>
@@ -13,15 +14,37 @@
             return {
                 isShow: false,
                 items: [],
+                xPos: 0,
+                yPos: 0
+            }
+        },
+        computed: {
+            styles(){
+                return {
+                    top: `${this.yPos + 10}px`,
+                    left: `${this.xPos + 20}px`
+                }
             }
         },
         methods: {
-            onShow(){
-
+            onClickAction(item){
+                item.action()
+                this.$context.close()
+            },
+            onShow({items, caller}){
+                this.isShow = true
+                this.items = items
+                this.setPosition(caller)
             },
             onHide(){
-
-            }
+                this.isShow = false
+                this.items = []
+            },
+            setPosition(caller){
+                const pos = caller.getBoundingClientRect();
+                this.xPos = pos.left
+                this.yPos = pos.top
+            },
         },
         mounted(){
             this.$context.EventBus.$on('show', this.onShow)
@@ -34,10 +57,12 @@
     }
 </script>
 
-<style scoped>
-.contetx {
+<style lang="scss" scoped>
+.context {
     position: absolute;
-    background: rgb(209, 159, 92);
+    background: rgb(154 194 255);
     cursor: pointer;
 }
 </style>
+
+

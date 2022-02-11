@@ -1,10 +1,10 @@
 <template>
   <div>
-    <div class="header">
+    <div >
       {{ settings.header }}
     </div>
-    <button class="green_btn" @click="show = !show">ADD NEW COST +</button>
-    <div class="form" v-if="show">
+    <button class="green_btn" @click="show = !show" :name="btn">ADD NEW COST +</button>
+    <div class="form"  v-if="show">
       <div class="content">
         <add-payment-form v-if="settings.content === 'AddPaymentForm'"/>
         <auth v-if="settings.content === 'Auth'"/>
@@ -12,6 +12,7 @@
 
         <button class="green_btn" @click="show = !show">Close</button>
     </div>
+    
   </div>
 </template>
 

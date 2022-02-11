@@ -11,17 +11,17 @@
     </button>
     </div>-->
 
-<Label>
+<label>
 <input type="checkbox" v-model="showvk" />Отобразить экранную клавиатуру
-</Label>
+</label>
 <div v-if="showvk">
     Виртуальная клавиатура
     <button v-for="btn in 10" :key="btn" @click="inputNum(btn - 1)">
         {{ btn - 1 }}
     </button>
-    <button @click="eraseOne">E</button>
+    <button @click="eraseOne" name="e">E</button>
     <br><br>
-<label><input type="radio" value="1" v-model="operch" name="operand" />Операнд 1</label>
+<label><input type="radio" value="1" v-model="operch" name="operand" checked />Операнд 1</label>
 <label><input type="radio" value="2" v-model="operch" name="operand" />Операнд 2</label>
 </div>
 
@@ -32,12 +32,17 @@
     </div>
 
     <hr/>
-    <button @click="calculate('+')">+</button>
-    <button @click="calculate('-')">-</button>
-    <button @click="calculate('/')">/</button>
-    <button @click="calculate('*')">*</button>
-    <button @click="calculate('^')">^</button>
-    <button @click="individe">Целочисленное деление</button>
+    <!-- <button @click="calculate('+')" :name="op">+</button>
+    <button @click="calculate('-')" :name="op">-</button> -->
+    <!-- <button @click="calculate('/')" :name="op">/</button> -->
+    <!-- <button @click="calculate('*')" :name="op">*</button>
+    <button @click="calculate('^')" :name="op">^</button> -->
+     <div>
+    <button v-for="op in operations" :key="op" @click="calculate(op)" :name="op">
+    {{ op }}
+    </button>
+    </div>
+    <!-- <button @click="individe" >Целочисленное деление</button> -->
   </div>
 </template>
 
@@ -53,7 +58,7 @@ export default {
       message: "Сalculator",
       operand1: 0,
       operand2: 0,
-      operations: ["+","-","/","*"],
+      operations: ["+","-","/","*", "%"],
       result: 0,
       error: '',
       showvk: false,
@@ -75,7 +80,14 @@ export default {
            return operand1 / operand2 
           },
         "*": () => operand1 * operand2,
-        "^": () => operand1 ** operand2   
+        "^": () => operand1 ** operand2,
+        "%": () => {
+          if (operand2 === 0) {
+            this.error = 'Нельзя делить на 0'
+            return
+          }
+        return Math.floor(operand1 / operand2)
+      } 
       };
       this.result = calcOperations[op]();
     },
@@ -110,9 +122,9 @@ export default {
     /* exponentiation(){
     this.result = this.operand1 ** this.operand2
     }, */
-    individe() {
-      this.result = Math.floor(this.operand1 / this.operand2)
-    }
+    // individe() {
+    //   this.result = Math.floor(this.operand1 / this.operand2)
+    // }
   }
 }
 </script>

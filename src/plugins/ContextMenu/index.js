@@ -4,13 +4,22 @@ export default {
             return
         }
         this.installed = true
+        this.caller = null
+
         Vue.prototype.$context = {
             EventBus: new Vue(),
-            show(items){
-                this.EventBus.$emit('show', items)
+            show({event, items}){
+                const caller = event.target
+                if(caller !== this.caller) {
+                    this.caller = caller
+                this.EventBus.$emit('show', {items, caller})
+                } else {
+                    this.close()
+                    this.caller = null
+                }
                 console.log('show')
             },
-            hide(){
+            close(){
                 this.EventBus.$emit('hide')
                 console.log('hide')
             }
