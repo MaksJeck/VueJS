@@ -1,19 +1,28 @@
 <template>
-  <div class="wrapper">
-      <div class="item" v-for="(item, index) in items" :key="item.id">
-          <span>{{item.id}}</span> - <span>{{item.date}}</span> - <span>{{item.category}}</span> - <span>{{item.value}}</span> - <span @click="onShowContextMenu($event, item, index)">...</span>
-          <app-edit-product />
-      </div>
+  <v-container>
+    <v-row>
+      <v-col :cols="2">#</v-col>
+      <v-col :cols="5">Date</v-col>
+      <v-col :cols="3">Category</v-col>
+      <v-col :cols="2">Value</v-col>
+    </v-row>
+    <v-row v-for="item in items" :key="item.id">
+      <v-col :cols="2">{{item.id}}</v-col>
+      <v-col :cols="5">{{item.date}}</v-col>
+      <v-col :cols="3">{{item.category}}</v-col>
+      <v-col :cols="2">{{item.value}}</v-col>
+    </v-row>
+  </v-container>
 
- 
 
 
-  </div>
+ <!-- <span @click="onShowContextMenu($event, item, index)">...</span> -->
+   
 </template>
 
 <script>
 
-import EditProduct from './EditProduct.vue';
+// import EditProduct from './EditProduct.vue';
 import {mapActions} from 'vuex';
 
 export default {
@@ -24,9 +33,9 @@ export default {
           default: () => [],
       }
   },
-  components: {
-    appEditProduct: EditProduct,
-  },
+  // components: {
+  //   appEditProduct: EditProduct,
+  // },
   data() {
     return {
 
@@ -37,26 +46,26 @@ export default {
       'delete_from_item',
       'edit_from_item'
     ]),
-    editItem(index){
+    editItem(){
       // console.log(index, item)
-     this.edit_from_item(index);
+     this.edit_from_item();
      
     },
-    removeItem(index) {     
-     this.delete_from_item(index); 
+    removeItem() {     
+     this.delete_from_item(); 
     },
-    onShowContextMenu(event, item, index){
+    onShowContextMenu(event, ){
       const items = [
         {
           text: "Edit",
           action: () => {
-            this.editItem(index);
+            this.editItem();
           }
         },
         {
           text: "Delete",
           action: () => {
-            this.removeItem(index);
+            this.removeItem();
           }
         },
       ]

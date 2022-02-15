@@ -1,70 +1,71 @@
 <template>
-  <div id="app">
-    <!-- <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
-    <MyButton v-if="show" />
-    <button @click="show=!show">show/hide</button> -->
-    <header>
-      <div class="title">My personal costs</div>
-    </header>
-    <main>
-      <!-- <add-payment-form @addNewPayment="addPayment" /> -->
-      TOTAL: {{ getFullPaymentValue }}
-      <br>
-      <button @click="onShowModal">ShowModal</button>
-      <hr />
-      <!-- <add-payment-form @addNewPayment="addPayment" /> -->
-      <payments-display :items="currentElements" />
-      <!-- <pagination :length="12" :cur="curPage" :n="3" @paginate="onChangePage"/> -->
-      <pagination :length="paymentsList.length" :cur="curPage" :n="n" @paginate="onChangePage"/>
-    </main>
-    <!-- <my-form /> -->
+  <v-container>
+    <v-row>
+      <v-col>
+        <div class="text-h5 text-sm-h3 mb-8">My personal costs</div>
+        <v-dialog v-model="dialog" width="500px">
+          <template #activator="{ on }">
+            <v-btn color="teal" dark v-on="on">Add new cost <v-icon>mdi-plus</v-icon></v-btn>
+          </template>
 
-    <!-- <button @click="show=!show">ADD NEW COST+ </button>
-         <div class="form" v-if="show">
-    </div> -->
-  </div>
+          <v-card>
+            <add-payment-form @onAdd="dialog=false" />
+          </v-card>
+
+        </v-dialog>
+        <payments-display :items="currentElements" />
+        <pagination />
+       
+      </v-col>     
+
+      <v-col> CHART
+        <graph />
+      </v-col>
+    </v-row>
+  </v-container>
 </template>
 
 <script>
-// import MyForm from "./components/MyForm.vue";
-// import AddPaymentForm from "./components/AddPaymentForm.vue";
-// import PaymentsDisplay from "./components/PaymentsDisplay.vue";
-// import Pagination from "./components/Pagination.vue";
+import Graph from './components/Graph.vue'
 import { mapMutations, mapActions, mapGetters } from "vuex";
-// import HelloWorld from './components/HelloWorld.vue'
-// import MyButton from './components/MyButton.vue'
+import Pagination from './components/Pagination.vue';
 
 export default {
   name: "App",
   components: {
-    Pagination: () => import('./components/Pagination.vue'),
-    // MyForm,
-    // AddPaymentForm,
-    PaymentsDisplay: () => import('./components/PaymentsDisplay.vue'),
-    // HelloWorld,
-    // MyButton
+    Graph,
+    PaymentsDisplay: () => import("./components/PaymentsDisplay.vue"),
+    AddPaymentForm: () => import("./components/AddPaymentForm.vue"),
+    Pagination,
   },
   data() {
     return {
+      dialog: false,
       curPage: 1,
-      n: 10,
-      // show: false,
-      // paymentsList: [],
-    };
+      n: 6,
+    }
+  },
+  watch: {
+    // paymentsList: function(){
+    //   // console.log(newValue, oldValue);
+    //   // renderChart(this.paymentsList);
+    // }
   },
   computed: {
-    ...mapGetters(['getFullPaymentValue']),
+    ...mapGetters(["getFullPaymentValue"]),
     // getFPV() {
     //   return this.$store.getters.getFullPaymentValue
     // },
     paymentsList() {
       return this.$store.getters.getPaymentList;
     },
-    currentElements(){
+    currentElements() {
       // return this.paymentsList.slice(3 * (this.curPage - 1), 3 * (this.curPage - 1) + 3)
-      return this.paymentsList.slice(this.n * (this.curPage - 1), this.n * (this.curPage - 1) + this.n)
-    }
+      return this.paymentsList.slice(
+        this.n * (this.curPage - 1),
+        this.n * (this.curPage - 1) + this.n
+      );
+    },
   },
   methods: {
     ...mapMutations({
@@ -75,15 +76,15 @@ export default {
       this.$store.commit("addDataToPaymentsList", data);
       // this.paymentsList = [...this.paymentsList, data];
     },
-    onShowModal(){
-      this.$modal.show('AddPaymentForm', {
+    onShowModal() {
+      this.$modal.show("AddPaymentForm", {
         header: "Add payment form",
-        content: "AddPaymentForm"
-      })
+        content: "AddPaymentForm",
+      });
     },
-    onChangePage(page){
-      this.curPage = page
-    //   this.fetchData(page)
+    onChangePage(page) {
+      this.curPage = page;
+      //   this.fetchData(page)
     },
     // fetchData() {
     //   return [
@@ -108,11 +109,12 @@ export default {
     //   ];
     // },
   },
+ 
   created() {
     // this.fetchData(this.curPage);
-    const {page} = this.$route.params
-    if(page) {
-        this.curPage = Number(page)
+    const { page } = this.$route.params;
+    if (page) {
+      this.curPage = Number(page);
     }
     this.fetchData();
 

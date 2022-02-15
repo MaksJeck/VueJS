@@ -30,11 +30,12 @@ const routes = [
         // component: addpaymentForm
         component: () => import (/* webpackChunkName: "AddPaymentForm" */ '../components/AddPaymentForm.vue')        
     },
-    {
-        path: '*',
-        // component: Page404
-        component: () => import (/* webpackChunkName: "Page404" */ '../Page404.vue')
-    }
+   
+    // {
+    //     path: '*',
+    //     // component: Page404
+    //     component: () => import (/* webpackChunkName: "Page404" */ '../Page404.vue')
+    // }
 ]
 
 const router = new VueRouter({

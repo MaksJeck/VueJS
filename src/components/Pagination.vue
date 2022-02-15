@@ -1,24 +1,25 @@
 <template>
-  <div class="center">
-    <div @click="onClick(cur - 1)">-</div>
-    <div
-      v-for="i in amount"
-      :key="i"
-      :class="{ active: cur === i }"
-      @click="onClick(i)">
-    {{ i }}
-    </div>
-    <div @click="onClick(cur + 1)">+</div>
-  </div>
+    <v-pagination
+      v-model="page"
+      :length="10"
+      @click="onClick(page)"
+      circle
+    ></v-pagination>
 </template>
 
 <script>
+
 export default {
   name: "Pagination",
   props: {
     length: Number,
     cur: Number,
     n: Number,
+  },
+  data(){
+    return {
+       page: 1,
+    }
   },
   computed: {
     amount() {

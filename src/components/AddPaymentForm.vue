@@ -1,17 +1,10 @@
 <template>
-  <div>
-    <input placeholder="Value" v-model.number="value" />
-
-    <div class="select">
-      <select v-model="category">
-        <option v-for="(option, idx) in options" :key="idx"> {{option}} </option>
-      </select>
-    </div>
-
-    <!-- <input placeholder="Category" v-model="category" /> -->
-    <input placeholder="Date" v-model="date" />
-    <button @click="onSaveClick">Save</button>
-  </div>
+  <v-card class="pa-8">
+    <v-text-field label="Date" placeholder="Date" v-model="date" />
+    <v-text-field label="Value" placeholder="Value" v-model.number="value" />
+    <v-select :items="options" v-model="category" label="Standard"></v-select>
+    <v-btn @click="onSaveClick">Save</v-btn>
+  </v-card>
 </template>
 
 <script>
@@ -32,40 +25,42 @@ export default {
       const y = today.getFullYear();
       return `${d}.${m}.${y}`;
     },
-    options(){
-      return this.$store.getters.getCategoryList
-    }
+    options() {
+      return this.$store.getters.getCategoryList;
+    },
   },
   methods: {
     onSaveClick() {
       const data = {
-          id: Date.now(),
+        id: Date.now(),
         value: this.value,
         category: this.category,
         date: this.date || this.getCurrentDate,
-      };
-      this.$emit("addNewPayment", data);
-      this.$store.commit('addDataToPaymentsList', data);
+      }
+      
+      this.$store.commit("addDataToPaymentsList", data);
+      this.$emit("onAdd");
       // console.log(data);
     },
   },
-  async created(){
-    if(!this.options.lenght){
-      await this.$store.dispatch('loadCategories');
-    } 
-    this.category = this.options[0];
-  },
-  mounted(){    
-    if(this.$route.params.category) {
-      this.category = this.$route.params.category
+  // async created() {
+  //   if (!this.options.lenght) {
+  //     await this.$store.dispatch("loadCategories");
+  //   }
+  //   this.category = this.options[0];
+  // },
+  mounted() {
+    this.$store.dispatch("loadCategories");
+    if (this.$route.params.category) {
+      this.category = this.$route.params.category;
     }
-    if(this.$route.query.value) {
-      this.value = this.$route.query.value
+    if (this.$route.query.value) {
+      this.value = this.$route.query.value;
     }
     if (this.value && this.category) {
-      this.onSaveClick()
+      this.onSaveClick();
     }
-  }
+  },
 };
 </script>
 
