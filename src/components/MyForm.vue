@@ -1,19 +1,15 @@
 <template>
-  <div>
-    <div >
-      {{ settings.header }}
-    </div>
-    <button class="green_btn" @click="show = !show" :name="btn">ADD NEW COST +</button>
-    <div class="form"  v-if="show">
-      <div class="content">
+  <v-container>
+    <v-row>
+      <v-col>
+        {{ settings.header }}
+        <v-btn class="green_btn" @click="show = !show" :name="btn" color="teal" dark v-on="on">Add new cost <v-icon>mdi-plus</v-icon></v-btn>
         <add-payment-form v-if="settings.content === 'AddPaymentForm'"/>
         <auth v-if="settings.content === 'Auth'"/>
-      </div>
-
-        <button class="green_btn" @click="show = !show">Close</button>
-    </div>
-    
-  </div>
+       
+      </v-col>
+    </v-row>
+  </v-container>
 </template>
 
 <script>
