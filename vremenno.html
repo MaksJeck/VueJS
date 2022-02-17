@@ -1,0 +1,34 @@
+<!--
+  switch(operation){
+    case '+':
+      this.add()
+    break;
+    case '-':
+      this.substract()
+    break;
+    case '*':
+      this.multiply()
+    break;
+    case '/':
+      this.divide()
+    break;
+    case '^':
+      this.exponentiation()
+    break;
+  }
+-->
+
+<div class="center">
+  <div @click="onClick(cur - 1)">-</div>
+  <div
+    v-for="i in amount"
+    :key="i"
+    :class="{ active: cur === i }"
+    @click="onClick(i)">
+  {{ i }}
+  </div>
+<div @click="onClick(cur + 1)">+</div>
+</div>
+
+
+:length="paymentsList.length" :cur="curPage" :n="n" @paginate="onChangePage"
